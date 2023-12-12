@@ -28,7 +28,7 @@ jobs:
 
     - name: Transfer Build Artifacts to EC2
       run: |
-        aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="mkdir -p /home/root/project"
+        aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="sudo -i && mkdir -p /home/root/project"
 
     - name: Deploy to EC2
       run: |
