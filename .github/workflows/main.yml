@@ -1,0 +1,36 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Display current directory
+        run: pwd
+
+      - name: Display directory contents
+        run: ls -ltrh
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build and package
+        run: |
+          npm run build
+          zip -r package.zip .
+
+      - name: Display packaged files
+        run: ls -ltrh
