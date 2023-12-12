@@ -1,0 +1,33 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '14'
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Transfer Code to EC2
+      run: aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r * ec2-user@localhost:/home/ubuntu/project"
+
+    - name: SSM into EC2 and Setup
+      run: |
+        aws ssm start-session --target i-0edeabf9042d24990 --document-name "AWS-StartInteractiveCommand" --parameters command-line="sudo -i && su ubuntu && cd /home/ubuntu/project"
+
+    - name: Deploy and Restart on EC2
+      run: |
+        aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="cd /home/ubuntu/project && npm restart"
