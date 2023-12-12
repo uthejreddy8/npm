@@ -21,6 +21,9 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Install npm 
+      run: cd /home/runner/work/npm/npm && npm run install
+
     - name: Install AWS CLI
       run: |
         sudo apt-get update
