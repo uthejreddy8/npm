@@ -22,10 +22,10 @@ jobs:
       run: npm install
 
     - name: Transfer Code to EC2
-      run: aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="./deploy_script.sh"
+      run: aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="mkdir -p /home/root/project && scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r build/* ec2-user@localhost:/home/root/project"
 
     - name: SSM into EC2 and Setup
-      run: aws ssm start-session --target i-0edeabf9042d24990 --document-name "AWS-StartInteractiveCommand" --parameters command-line="sudo -i && su ubuntu && cd /home/root/project"
+      run: aws ssm start-session --target i-0edeabf9042d24990 --document-name "AWS-StartInteractiveCommand" --parameters command-line="sudo -i && cd /home/root/project"
 
     - name: Deploy and Restart on EC2
       run: aws ssm send-command --targets Key=instanceids,Values=i-0edeabf9042d24990 --document-name "AWS-RunShellScript" --parameters commands="cd /home/root/project && npm restart"
