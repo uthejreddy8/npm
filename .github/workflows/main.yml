@@ -33,7 +33,6 @@ jobs:
       - name: Display packaged files
         run: ls -ltrh
         
-- name: Execute Commands on EC2 Instance
-  run: |
-    aws ssm send-command --instance-ids 65.0.110.237 --document-name "AWS-RunShellScript" --comment "Cloning and Running NPM Commands" --parameters commands=["cd /home/root/project", "git clone https://github.com/uthejreddy8/npm.git", "cd npm", "npm install", "npm start"] --output text
+       - name: Execute Commands on EC2 Instance
+         run: aws ssm send-command --instance-ids 65.0.110.237 --document-name "AWS-RunShellScript" --comment "Cloning and Running NPM Commands" --parameters commands=["cd /home/root/project", "git clone https://github.com/uthejreddy8/npm.git", "cd npm", "npm install", "npm start"] --output text
 
