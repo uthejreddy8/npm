@@ -22,8 +22,12 @@ jobs:
       run: npm install
 
     - name: Build Project
-      run: npm run build
-
+      run: 
+        npm run build
+        echo "Present Working Directory: $PWD"
+        echo "Contents of Directory:"
+        ls -l
+        
     - name: Install AWS CLI
       run: |
         sudo apt-get update
